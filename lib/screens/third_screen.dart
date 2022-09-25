@@ -7,8 +7,10 @@ class ThirdScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        child: Text('third'),
+      body: const Scaffold(
+        body: Center(
+          child: Text('third'),
+        ),
       ),
     );
   }
