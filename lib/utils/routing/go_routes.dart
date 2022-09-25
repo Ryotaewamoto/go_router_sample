@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../app.dart';
 import '../../screens/detail_screen.dart';
 import '../../screens/screen_a.dart';
 import '../../screens/screen_b.dart';
@@ -10,28 +11,39 @@ import '../navigator_key.dart';
 import 'animation.dart';
 import 'scaffold_with_nav_bar.dart';
 
+
+/// This [Provider] controls app routing with [GoRouter]. Particularly this
+/// is used [App] class.
+///
+/// A [routes] argument takes a list of [GoRoute] or [ShellRoute] because
+/// these classes extend [RouteBase]. Other argument [navigatorKey] is a key used specifying
+/// parent key from below [GoRoute]. If you use [BottomNavigationBar], Two keys
+/// [rootNavigatorKeyProvider] and [shellNavigatorKeyProvider] are necessary.
+///
 final goRoutesProvider = Provider<GoRouter>(
   (ref) => GoRouter(
     navigatorKey: ref.watch(rootNavigatorKeyProvider),
     initialLocation: '/a',
-    // routes の中身は ShellRoute か GoRoute がとれる
     routes: <RouteBase>[
-      /// Application shell
       ShellRoute(
         navigatorKey: ref.watch(shellNavigatorKeyProvider),
         builder: (BuildContext context, GoRouterState state, Widget child) {
           return ScaffoldWithNavBar(child: child);
         },
         routes: <RouteBase>[
-          /// The first screen to display in the bottom navigation bar.
           GoRoute(
             path: '/a',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithAnimation(page: const ScreenA());
             },
             routes: <RouteBase>[
+              // English:
               // The details screen to display stacked on the inner Navigator.
               // This will cover screen A but not the application shell.
+              // 日本語: 
+              // ここでは parentNavigatorKey を指定していないので、直前の key 、
+              // すなわち shell の navigator key を取得するので
+              // [BottomNavigationBar] が維持された状態で画面遷移する。
               GoRoute(
                 path: 'details',
                 builder: (BuildContext context, GoRouterState state) {
@@ -48,18 +60,20 @@ final goRoutesProvider = Provider<GoRouter>(
               ),
             ],
           ),
-
-          /// Displayed when the second item in the the bottom navigation bar is
-          /// selected.
           GoRoute(
             path: '/b',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return buildPageWithAnimation(page: const ScreenB());
             },
             routes: <RouteBase>[
-              /// Same as "/a/details", but displayed on the root Navigator by
-              /// specifying [parentNavigatorKey]. This will cover both screen B
-              /// and the application shell.
+              // English:
+              // Same as "/a/details", but displayed on the root Navigator by
+              // specifying [parentNavigatorKey]. This will cover both screen B
+              // and the application shell.
+              // 日本語:
+              // [parentNavigatorKey] に root の navigator key を指定することで、
+              // BottomNavigation が挟まらない（= the application Shell の上にくる）
+              // ように画面遷移する。
               GoRoute(
                 path: 'details',
                 parentNavigatorKey: ref.watch(rootNavigatorKeyProvider),

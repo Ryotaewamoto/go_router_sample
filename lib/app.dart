@@ -3,9 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'utils/routing/go_routes.dart';
 
-/// An example demonstrating how to use [ShellRoute]
+/// [App] has routing settings
 class App extends HookConsumerWidget {
-  /// Creates a [App]
   const App({Key? key}) : super(key: key);
 
   @override

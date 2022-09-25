@@ -15,7 +15,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Detail')),
+      appBar: AppBar(title: Text('Detail $label')),
       body: Center(
         child: Column(
           children: [
