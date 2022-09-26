@@ -15,3 +15,5 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # go_router_sample
+
+![CleanShot 2022-09-26 at 20 07 33](https://user-images.githubusercontent.com/75112184/192261723-12c1d914-ac79-4000-977f-b77151e104cf.gif)
