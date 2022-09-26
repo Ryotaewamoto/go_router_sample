@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_sample/pages/not_found_page.dart';
+import 'package:go_router_sample/pages/sign_in_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../app.dart';
+import '../../features/auth.dart';
 import '../../pages/account_page.dart';
 import '../../pages/product_page.dart';
 import '../../pages/products_list_page.dart';
@@ -25,6 +30,15 @@ final goRoutesProvider = Provider<GoRouter>(
     navigatorKey: ref.watch(rootNavigatorKeyProvider),
     initialLocation: ProductsListPage.path,
     routes: <RouteBase>[
+      GoRoute(
+        path: SignInPage.path,
+        name: SignInPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignInPage(
+            key: ValueKey(SignInPage.name),
+          );
+        },
+      ),
       ShellRoute(
         navigatorKey: ref.watch(shellNavigatorKeyProvider),
         builder: (BuildContext context, GoRouterState state, Widget child) {
@@ -96,12 +110,44 @@ final goRoutesProvider = Provider<GoRouter>(
         ],
       ),
     ],
-    errorBuilder: (BuildContext context, GoRouterState state) {
-      return const NotFoundPage();
+    refreshListenable: GoRouterRefreshStream(ref.watch(authUserProvider.stream)),
+    redirect: (context, state) {
+      // final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+      // if (isLoggedIn) {
+        if (state.location == SignInPage.path) {
+          return ProductsListPage.path;
+        }
+      // } else {
+      //     return ProductsListPage.path;
+      // }
+      return null;
+
+      // return SignInPage.path;
     },
+    // errorBuilder: (BuildContext context, GoRouterState state) {
+    //   return const NotFoundPage();
+    // },
   ),
 );
 
 final goRouterStateProvider = Provider<GoRouterState>(
   (_) => throw const AppException(message: 'データが見つかりませんでした。'),
 );
+
+/// This class was included
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/exceptions/base.dart';
-import '../utils/routing/go_routes.dart';
+import '../utils/routing/app_routes.dart';
 import 'products_list_page.dart';
 import 'third_screen.dart';
 

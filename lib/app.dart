@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'utils/color_schemes.dart';
-import 'utils/routing/go_routes.dart';
+import 'utils/routing/app_routes.dart';
 
 /// [App] has routing settings
 class App extends HookConsumerWidget {
