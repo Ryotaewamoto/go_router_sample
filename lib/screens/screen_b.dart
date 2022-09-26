@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// The second screen in the bottom navigation bar.
 class ScreenB extends StatelessWidget {
-  /// Constructs a [ScreenB] widget.
   const ScreenB({Key? key}) : super(key: key);
+
+  static const path = '/b';
+  static const name = 'B';
+  static const location = path;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Screen B')),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(
+          'Screen B',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'utils/color_schemes.dart';
 import 'utils/routing/go_routes.dart';
 
 /// [App] has routing settings
@@ -12,9 +13,8 @@ class App extends HookConsumerWidget {
     final goRouter = ref.watch(goRoutesProvider);
     return MaterialApp.router(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       routeInformationParser: goRouter.routeInformationParser,
       routerDelegate: goRouter.routerDelegate,
       routeInformationProvider: goRouter.routeInformationProvider,

@@ -40,18 +40,18 @@ final goRoutesProvider = Provider<GoRouter>(
               // English:
               // The details screen to display stacked on the inner Navigator.
               // This will cover screen A but not the application shell.
-              // 日本語: 
+              // 日本語:
               // ここでは parentNavigatorKey を指定していないので、直前の key 、
               // すなわち shell の navigator key を取得するので
               // [BottomNavigationBar] が維持された状態で画面遷移する。
               GoRoute(
-                path: 'details',
+                path: DetailsScreen.location,
                 builder: (BuildContext context, GoRouterState state) {
-                  return const DetailsScreen(label: 'A');
+                  return const DetailsScreen(label: 'a');
                 },
                 routes: <RouteBase>[
                   GoRoute(
-                    path: 'third',
+                    path: ThirdScreen.location,
                     builder: (BuildContext context, GoRouterState state) {
                       return const ThirdScreen();
                     },
@@ -75,10 +75,10 @@ final goRoutesProvider = Provider<GoRouter>(
               // BottomNavigation が挟まらない（= the application Shell の上にくる）
               // ように画面遷移する。
               GoRoute(
-                path: 'details',
+                path: DetailsScreen.location,
                 parentNavigatorKey: ref.watch(rootNavigatorKeyProvider),
                 builder: (BuildContext context, GoRouterState state) {
-                  return const DetailsScreen(label: 'B');
+                  return const DetailsScreen(label: 'b');
                 },
               ),
             ],

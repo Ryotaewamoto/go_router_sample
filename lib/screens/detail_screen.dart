@@ -9,13 +9,24 @@ class DetailsScreen extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// The label to display in the center of the screen.
   final String label;
+
+  static const path = 'details';
+  static const name = 'Detail';
+  static const location = path;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Detail $label')),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(
+          'Detail $label',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       body: Center(
         child: Column(
           children: [
