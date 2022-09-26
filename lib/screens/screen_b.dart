@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'detail_screen.dart';
+
 class ScreenB extends StatelessWidget {
   const ScreenB({Key? key}) : super(key: key);
 
@@ -27,7 +29,7 @@ class ScreenB extends StatelessWidget {
             const Text('Screen B'),
             TextButton(
               onPressed: () {
-                GoRouter.of(context).go('/b/details');
+                GoRouter.of(context).go('${ScreenB.location}/${DetailsScreen.location}');
               },
               child: const Text('View B details'),
             ),
