@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router_sample/pages/not_found_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../app.dart';
-import '../../screens/detail_screen.dart';
-import '../../screens/screen_a.dart';
-import '../../screens/screen_b.dart';
-import '../../screens/third_screen.dart';
+import '../../pages/account_page.dart';
+import '../../pages/product_page.dart';
+import '../../pages/products_list_page.dart';
+import '../exceptions/base.dart';
 import '../navigator_key.dart';
 import 'animation.dart';
 import 'scaffold_with_nav_bar.dart';
-
 
 /// This [Provider] controls app routing with [GoRouter]. Particularly this
 /// is used [App] class.
@@ -23,7 +23,7 @@ import 'scaffold_with_nav_bar.dart';
 final goRoutesProvider = Provider<GoRouter>(
   (ref) => GoRouter(
     navigatorKey: ref.watch(rootNavigatorKeyProvider),
-    initialLocation: '/a',
+    initialLocation: ProductsListPage.path,
     routes: <RouteBase>[
       ShellRoute(
         navigatorKey: ref.watch(shellNavigatorKeyProvider),
@@ -32,40 +32,50 @@ final goRoutesProvider = Provider<GoRouter>(
         },
         routes: <RouteBase>[
           GoRoute(
-            path: '/a',
+            path: ProductsListPage.path,
+            name: ProductsListPage.name,
             pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithAnimation(page: const ScreenA());
+              return buildPageWithAnimation(
+                page: const ProductsListPage(
+                  key: ValueKey(ProductsListPage.name),
+                ),
+              );
             },
-            routes: <RouteBase>[
-              // English:
-              // The details screen to display stacked on the inner Navigator.
-              // This will cover screen A but not the application shell.
-              // 日本語:
-              // ここでは parentNavigatorKey を指定していないので、直前の key 、
-              // すなわち shell の navigator key を取得するので
-              // [BottomNavigationBar] が維持された状態で画面遷移する。
-              GoRoute(
-                path: DetailsScreen.location,
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetailsScreen(label: 'a');
-                },
-                routes: <RouteBase>[
-                  GoRoute(
-                    path: ThirdScreen.location,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const ThirdScreen();
-                    },
-                  ),
-                ],
-              ),
-            ],
           ),
           GoRoute(
-            path: '/b',
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return buildPageWithAnimation(page: const ScreenB());
+            // English:
+            // The details screen to display stacked on the inner Navigator.
+            // This will cover screen A but not the application shell.
+            // 日本語:
+            // ここでは parentNavigatorKey を指定していないので、直前の key 、
+            // すなわち shell の navigator key を取得するので
+            // [BottomNavigationBar] が維持された状態で画面遷移する。
+            path: ProductPage.path,
+            name: ProductPage.name,
+            builder: (BuildContext context, GoRouterState state) {
+              return ProviderScope(
+                overrides: <Override>[
+                  goRouterStateProvider.overrideWithValue(state),
+                ],
+                child: const ProductPage(
+                  key: ValueKey(ProductPage.name),
+                ),
+              );
             },
-            routes: <RouteBase>[
+          ),
+          // GoRoute(
+          //   path: ThirdScreen.location,
+          //   builder: (BuildContext context, GoRouterState state) {
+          //     return const ThirdScreen();
+          //   },
+          // ),
+          GoRoute(
+            path: AccountPage.location,
+            name: AccountPage.name,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return buildPageWithAnimation(page: const AccountPage());
+            },
+            routes: const <RouteBase>[
               // English:
               // Same as "/a/details", but displayed on the root Navigator by
               // specifying [parentNavigatorKey]. This will cover both screen B
@@ -74,17 +84,24 @@ final goRoutesProvider = Provider<GoRouter>(
               // [parentNavigatorKey] に root の navigator key を指定することで、
               // BottomNavigation が挟まらない（= the application Shell の上にくる）
               // ように画面遷移する。
-              GoRoute(
-                path: DetailsScreen.location,
-                parentNavigatorKey: ref.watch(rootNavigatorKeyProvider),
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetailsScreen(label: 'b');
-                },
-              ),
+              // GoRoute(
+              //   path: ProductPage.path,
+              //   parentNavigatorKey: ref.watch(rootNavigatorKeyProvider),
+              //   builder: (BuildContext context, GoRouterState state) {
+              //     return const ProductPage();
+              //   },
+              // ),
             ],
           ),
         ],
       ),
     ],
+    errorBuilder: (BuildContext context, GoRouterState state) {
+      return const NotFoundPage();
+    },
   ),
+);
+
+final goRouterStateProvider = Provider<GoRouterState>(
+  (_) => throw const AppException(message: 'データが見つかりませんでした。'),
 );

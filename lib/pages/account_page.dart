@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'detail_screen.dart';
+import 'product_page.dart';
 
-class ScreenA extends StatelessWidget {
-  const ScreenA({Key? key}) : super(key: key);
+class AccountPage extends StatelessWidget {
+  const AccountPage({Key? key}) : super(key: key);
 
-  static const path = '/a';
-  static const name = 'A';
+  static const path = '/account';
+  static const name = 'Account';
   static const location = path;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          'Screen A',
+          'Account',
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
           ),
@@ -29,13 +26,13 @@ class ScreenA extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text('Screen A'),
+            const Text('Screen B'),
             TextButton(
               onPressed: () {
                 GoRouter.of(context)
-                    .go('${ScreenA.location}/${DetailsScreen.location}');
+                    .go('${AccountPage.location}/${ProductPage.location}');
               },
-              child: const Text('View A details'),
+              child: const Text('View B details'),
             ),
           ],
         ),
