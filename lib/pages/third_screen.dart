@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ThirdScreen extends StatelessWidget {
   const ThirdScreen({super.key});
 
-  static const path = 'third';
+  static const path = '/third';
   static const name = 'Third';
   static const location = path;
 

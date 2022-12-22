@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'product_page.dart';
+import '../features/auth.dart';
+import 'sign_in_page.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends HookConsumerWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   static const path = '/account';
@@ -11,7 +14,7 @@ class AccountPage extends StatelessWidget {
   static const location = path;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -28,11 +31,17 @@ class AccountPage extends StatelessWidget {
           children: <Widget>[
             const Text('Screen B'),
             TextButton(
-              onPressed: () {
-                GoRouter.of(context)
-                    .go('${AccountPage.location}/${ProductPage.location}');
+              onPressed: () async {
+                GoRouter.of(context).go(SignInPage.location);
               },
-              child: const Text('View B details'),
+              child: const Text('ログイン'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await ref.read(signOutProvider)();
+                print(FirebaseAuth.instance.currentUser != null);
+              },
+              child: const Text('ログアウト'),
             ),
           ],
         ),

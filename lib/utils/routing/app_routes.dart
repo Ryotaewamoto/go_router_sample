@@ -9,9 +9,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../app.dart';
 import '../../features/auth.dart';
+import '../../features/bottom_tab.dart';
 import '../../pages/account_page.dart';
 import '../../pages/product_page.dart';
 import '../../pages/products_list_page.dart';
+import '../../pages/third_screen.dart';
 import '../exceptions/base.dart';
 import '../navigator_key.dart';
 import 'animation.dart';
@@ -77,12 +79,12 @@ final goRoutesProvider = Provider<GoRouter>(
               );
             },
           ),
-          // GoRoute(
-          //   path: ThirdScreen.location,
-          //   builder: (BuildContext context, GoRouterState state) {
-          //     return const ThirdScreen();
-          //   },
-          // ),
+          GoRoute(
+            path: ThirdScreen.location,
+            builder: (BuildContext context, GoRouterState state) {
+              return const ThirdScreen();
+            },
+          ),
           GoRoute(
             path: AccountPage.location,
             name: AccountPage.name,
@@ -110,20 +112,27 @@ final goRoutesProvider = Provider<GoRouter>(
         ],
       ),
     ],
-    refreshListenable: GoRouterRefreshStream(ref.watch(authUserProvider.stream)),
+    // サインインをしていなければサインイン画面に遷移することができ、
+    // サインイン後はホームに戻ってくる。
+    //
     redirect: (context, state) {
-      // final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-      // if (isLoggedIn) {
+      final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+      if (isLoggedIn) {
         if (state.location == SignInPage.path) {
+          final bottomTab = bottomTabs[0];
+          ref
+              .read(bottomTabStateProvider.notifier)
+              .update((state) => bottomTab);
           return ProductsListPage.path;
         }
-      // } else {
-      //     return ProductsListPage.path;
-      // }
+      } else {
+        return state.location;
+      }
       return null;
-
-      // return SignInPage.path;
     },
+    refreshListenable:
+        GoRouterRefreshStream(ref.watch(authProvider).authStateChanges()),
+    // return SignInPage.path;
     // errorBuilder: (BuildContext context, GoRouterState state) {
     //   return const NotFoundPage();
     // },
